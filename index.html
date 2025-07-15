@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>music sam</title>
+    <style>
+      .player {
+        animation: rgbGlow 6s ease-in-out infinite;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      @keyframes rgbGlow {
+        0% {
+          box-shadow: 0 0 20px #00fff2;
+        }
+        25% {
+          box-shadow: 0 0 20px #ff00f2;
+        }
+        50% {
+          box-shadow: 0 0 20px #f2ff00;
+        }
+        75% {
+          box-shadow: 0 0 20px #00f2ff;
+        }
+        100% {
+          box-shadow: 0 0 20px #00fff2;
+        }
+      }
+
+      .title.glitch {
+        position: relative;
+        color: white;
+        animation: glitch 2s infinite;
+        font-weight: bold;
+        text-shadow: 0 0 1px white;
+      }
+
+      @keyframes glitch {
+        0% {
+          transform: none;
+          opacity: 1;
+        }
+        10% {
+          transform: translateX(-1px) skewX(-5deg);
+          opacity: 0.8;
+        }
+        20% {
+          transform: translateX(1px) skewX(5deg);
+          opacity: 1;
+        }
+        30% {
+          transform: translateX(0px) skewX(0deg);
+          opacity: 0.9;
+        }
+        100% {
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      .cover.flip {
+        animation: flipCover 0.6s ease;
+      }
+
+      @keyframes flipCover {
+        0% {
+          transform: rotateY(0deg);
+        }
+        50% {
+          transform: rotateY(90deg);
+          opacity: 0.5;
+        }
+        100% {
+          transform: rotateY(0deg);
+          opacity: 1;
+        }
+      }
+
+      #bgCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      body {
+        background: #f0f0f0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .player {
+        background: #757575;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: center;
+        width: 300px;
+      }
+      .cover {
+        width: 100%;
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+      }
+      .cover:hover {
+        transform: scale(1.03);
+      }
+
+      #cover {
+        width: 100%;
+        border-radius: 14px;
+        filter: grayscale(70%) brightness(0.8) contrast(1.3) saturate(0.6);
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.1),
+          0 0 45px rgba(255, 0, 255, 0.1),
+          inset 0 0 20px rgba(255, 255, 255, 0.04);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(4px);
+        transition: all 0.4s ease;
+        transform: scale(1.025) rotateZ(-0.8deg);
+        animation: subtlePulse 6s infinite alternate;
+        position: relative;
+        z-index: 1;
+        filter: grayscale(70%) brightness(0.8) contrast(1.3) saturate(0.6);
+        transform: scale(1.025) rotateZ(-0.8deg);
+        border-radius: 14px;
+        transition: all 0.4s ease;
+        position: relative;
+        z-index: 1;
+
+        /* ini tambahan buat RGB glow */
+        animation: rgbCoverGlow 6s infinite ease-in-out;
+      }
+
+      @keyframes rgbCoverGlow {
+        0% {
+          box-shadow: 0 0 10px #00fff2, 0 0 20px #00fff2;
+        }
+        25% {
+          box-shadow: 0 0 10px #ff00f2, 0 0 20px #ff00f2;
+        }
+        50% {
+          box-shadow: 0 0 10px #f2ff00, 0 0 20px #f2ff00;
+        }
+        75% {
+          box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff;
+        }
+        100% {
+          box-shadow: 0 0 10px #00fff2, 0 0 20px #00fff2;
+        }
+      }
+
+      #cover:hover {
+        filter: grayscale(20%) brightness(1) contrast(1.5) saturate(1);
+        transform: scale(1.05) rotateZ(1deg);
+        box-shadow: 0 0 35px rgba(0, 255, 255, 0.3),
+          0 0 60px rgba(255, 0, 255, 0.25),
+          inset 0 0 50px rgba(255, 255, 255, 0.08);
+      }
+
+      .title,
+      .artist {
+        transition: opacity 0.5s ease;
+      }
+      .title {
+        font-size: 22px;
+        margin: 10px 0 4px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #ffffff;
+        text-shadow: 0 0 10px #00f2ff;
+      }
+
+      .artist {
+        font-size: 18px;
+        font-weight: 600;
+        font-family: "Courier New", monospace;
+        color: #ccc;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        margin-bottom: 16px;
+      }
+
+      .controls button {
+        position: relative;
+        overflow: hidden;
+        margin: 0 10px;
+        padding: 12px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #222, #444);
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .controls button:hover {
+        background: #000;
+        box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+      }
+
+      .controls button:active {
+        transform: scale(0.92);
+        box-shadow: 0 0 18px rgba(0, 255, 255, 0.6);
+      }
+
+      #visualizer {
+        background: #111;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      }
+
+      /* Ripple effect */
+      .controls button::after {
+        content: "";
+        position: absolute;
+        width: 120%;
+        height: 120%;
+        top: 50%;
+        left: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0);
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        animation: ripple 0.5s ease-out;
+      }
+
+      @keyframes buttonPop {
+        0% {
+          transform: translateY(30px) scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes sparkle {
+        0% {
+          box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff inset;
+        }
+        50% {
+          box-shadow: 0 0 20px #ff00e0, 0 0 30px #ff00e0 inset;
+        }
+        100% {
+          box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff inset;
+        }
+      }
+
+      .controls button {
+        position: relative;
+        overflow: hidden;
+        margin: 0 10px;
+        padding: 14px 18px;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #111, #222);
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        animation: buttonPop 0.6s ease forwards;
+        box-shadow: 0 0 16px rgba(0, 255, 255, 0.5),
+          0 0 8px rgba(255, 0, 255, 0.3);
+        text-shadow: 0 0 5px #00f2ff;
+      }
+
+      .controls button:hover {
+        background: #000;
+        animation: sparkle 2s infinite;
+        transform: scale(1.08);
+      }
+
+      .controls button:active {
+        transform: scale(0.9);
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.9),
+          0 0 40px rgba(255, 0, 255, 0.7);
+      }
+
+      /* Ripple effect */
+      .ripple {
+        content: "";
+        position: absolute;
+        width: 140%;
+        height: 140%;
+        top: 50%;
+        left: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0);
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        animation: ripple 0.6s ease-out;
+      }
+
+      @keyframes ripple {
+        to {
+          transform: translate(-50%, -50%) scale(2.8);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bgCanvas"></canvas>
+    <div class="player">
+      <img id="cover" class="cover" src="cover1.jpg" alt="Cover" />
+      <div class="title glitch" id="title">About You</div>
+      <div class="artist" id="artist">The 1975</div>
+
+      <div class="controls">
+        <button onclick="prevSong()">⏮</button>
+        <button onclick="togglePlay()" id="playBtn">▶</button>
+        <button onclick="nextSong()">⏭</button>
+        <button onclick="shuffleSong()" id="shuffleBtn">↹</button>
+        <button onclick="repeatSong()">⟲</button>
+      </div>
+
+      <canvas
+        id="visualizer"
+        width="280"
+        height="60"
+        style="margin-top: 20px"
+      ></canvas>
+
+      <audio id="audio" src="about.mp3"></audio>
+    </div>
+
+    <script>
+      const bgCanvas = document.getElementById("bgCanvas");
+      const ctxBG = bgCanvas.getContext("2d");
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+
+      const stars = [];
+      for (let i = 0; i < 100; i++) {
+        stars.push({
+          x: Math.random() * bgCanvas.width,
+          y: Math.random() * bgCanvas.height,
+          r: Math.random() * 1.5,
+          alpha: Math.random(),
+          speed: Math.random() * 0.02 + 0.01,
+        });
+      }
+
+      let hue = 200;
+
+      let shootingStars = [];
+
+      function spawnShootingStar() {
+        const dir = Math.random() > 0.5 ? "left-right" : "top-down";
+        const startX =
+          dir === "left-right" ? -100 : Math.random() * bgCanvas.width;
+        const startY =
+          dir === "top-down" ? -100 : Math.random() * bgCanvas.height;
+        const speedX = dir === "left-right" ? Math.random() * 3 + 5 : 0;
+        const speedY = dir === "top-down" ? Math.random() * 3 + 5 : 0;
+
+        shootingStars.push({
+          x: startX,
+          y: startY,
+          vx: speedX,
+          vy: speedY,
+          alpha: 1,
+        });
+
+        // spawn lagi dalam 3–6 detik
+        setTimeout(spawnShootingStar, Math.random() * 3000 + 3000);
+      }
+
+      spawnShootingStar(); // mulaiin pertama kali
+
+      function drawBG() {
+        ctxBG.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+        // Gradient aurora background
+        const gradient = ctxBG.createLinearGradient(0, 0, 0, bgCanvas.height);
+        gradient.addColorStop(0, `hsl(${hue}, 100%, 20%)`);
+        gradient.addColorStop(1, `hsl(${(hue + 60) % 360}, 100%, 10%)`);
+        ctxBG.fillStyle = gradient;
+        ctxBG.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+        // Bintang kedip-kedip
+        for (let star of stars) {
+          ctxBG.beginPath();
+          ctxBG.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+          ctxBG.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+          ctxBG.fill();
+          star.alpha += star.speed;
+          if (star.alpha <= 0 || star.alpha >= 1) star.speed *= -1;
+        }
+
+        // Gambar bintang jatuh
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const s = shootingStars[i];
+          ctxBG.beginPath();
+          ctxBG.moveTo(s.x, s.y);
+          ctxBG.lineTo(s.x - s.vx * 5, s.y - s.vy * 5);
+          ctxBG.strokeStyle = `rgba(255, 255, 255, ${s.alpha})`;
+          ctxBG.lineWidth = 2;
+          ctxBG.stroke();
+
+          s.x += s.vx;
+          s.y += s.vy;
+          s.alpha -= 0.01;
+
+          if (
+            s.alpha <= 0 ||
+            s.x > bgCanvas.width + 100 ||
+            s.y > bgCanvas.height + 100
+          ) {
+            shootingStars.splice(i, 1);
+          }
+        }
+
+        hue = (hue + 0.1) % 360;
+        requestAnimationFrame(drawBG);
+      }
+
+      drawBG();
+    </script>
+
+    <script>
+      const songs = [
+        {
+          title: "About You",
+          artist: "The 1975",
+          file: "about.mp3",
+          cover: "about.jpg",
+        },
+
+        {
+          title: "Where We Are",
+          artist: "One Direction",
+          file: "where.mp3",
+          cover: "where.jpg",
+        },
+
+        {
+          title: "Serana",
+          artist: "For Revenge",
+          file: "serana.mp3",
+          cover: "serana.jpg",
+        },
+
+        {
+          title: "Sadrah",
+          artist: "For Revenge",
+          file: "sadrah.mp3",
+          cover: "sadrah.jpg",
+        },
+
+        {
+          title: "Penyangkalan",
+          artist: "For Revenge",
+          file: "penyangkalan.mp3",
+          cover: "penyangkalan.jpg",
+        },
+
+        {
+          title: "Sailor Song",
+          artist: "Gigi Perez",
+          file: "sailor.mp3",
+          cover: "sailor.jpg",
+        },
+
+        {
+          title: "Fix You",
+          artist: "ColdPlay",
+          file: "fix.mp3",
+          cover: "fix.jpg",
+        },
+
+        {
+          title: "Sorai",
+          artist: "Nadin Amizah",
+          file: "sorai.mp3",
+          cover: "sorai.jpg",
+        },
+
+        {
+          title: "Kekal",
+          artist: "Nadin Amizah",
+          file: "kekal.mp3",
+          cover: "kekal.jpg",
+        },
+
+        {
+          title: "Tapi Di Terima",
+          artist: "Nadin Amizah",
+          file: "diterima.mp3",
+          cover: "kekal.jpg",
+        },
+
+        {
+          title: "Tarot",
+          artist: "Feast",
+          file: "tarot.mp3",
+          cover: "tarot.jpg",
+        },
+
+        {
+          title: "Everything You Are",
+          artist: "Hindia",
+          file: "youare.mp3",
+          cover: "youare.jpg",
+        },
+
+        {
+          title: "Membasuh",
+          artist: "Hindia",
+          file: "membasuh.mp3",
+          cover: "membasuh.jpg",
+        },
+
+        {
+          title: "Evaluasi",
+          artist: "Hindia",
+          file: "eva.mp3",
+          cover: "eva.jpg",
+        },
+      ];
+
+      let currentSong = 0;
+      const audio = document.getElementById("audio");
+      const title = document.getElementById("title");
+      const artist = document.getElementById("artist");
+      const cover = document.getElementById("cover");
+      const playBtn = document.getElementById("playBtn");
+      let isShuffled = false;
+      let songOrder = songs.map((_, index) => index); // default urutan [0,1,2,...]
+
+      function loadSong(index) {
+        title.classList.add("glitch");
+        setTimeout(() => title.classList.remove("glitch"), 2000);
+        cover.classList.add("flip");
+        setTimeout(() => cover.classList.remove("flip"), 600);
+        const song = songs[songOrder[index]];
+        title.textContent = song.title;
+        artist.textContent = song.artist;
+        cover.src = song.cover;
+        audio.src = song.file;
+        playBtn.textContent = "▶";
+      }
+
+      function togglePlay() {
+        if (audio.paused) {
+          audio.play();
+          playBtn.textContent = "⏸";
+        } else {
+          audio.pause();
+          playBtn.textContent = "▶";
+        }
+      }
+
+      function nextSong() {
+        currentSong = (currentSong + 1) % songOrder.length;
+        loadSong(currentSong);
+        audio.play();
+        playBtn.textContent = "⏸";
+      }
+
+      function prevSong() {
+        currentSong = (currentSong - 1 + songOrder.length) % songOrder.length;
+        loadSong(currentSong);
+        audio.play();
+        playBtn.textContent = "⏸";
+      }
+
+      let repeatOnce = false;
+      function repeatSong() {
+        repeatOnce = !repeatOnce;
+        document.querySelector('button[onclick="repeatSong()"]').style.color =
+          repeatOnce ? "#00f2ff" : "white";
+      }
+
+      function shuffleSong() {
+        isShuffled = !isShuffled;
+        const shuffleBtn = document.getElementById("shuffleBtn");
+        shuffleBtn.style.color = isShuffled ? "#00f2ff" : "white";
+
+        if (isShuffled) {
+          // Acak ulang urutan lagu, tapi pastikan lagu sekarang tetap di urutan paling depan
+          const remaining = songs
+            .map((_, i) => i)
+            .filter((i) => i !== songOrder[currentSong]);
+          for (let i = remaining.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+          }
+          songOrder = [songOrder[currentSong], ...remaining];
+          currentSong = 0; // reset pointer ke lagu yang sedang diputar
+        } else {
+          // Kembali ke urutan asli
+          songOrder = songs.map((_, index) => index);
+        }
+      }
+
+      loadSong(currentSong);
+
+      // === VISUALIZER ===
+      const canvas = document.getElementById("visualizer");
+      const ctx = canvas.getContext("2d");
+
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioCtx.createAnalyser();
+      const source = audioCtx.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      analyser.fftSize = 64;
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function drawVisualizer() {
+        requestAnimationFrame(drawVisualizer);
+        analyser.getByteFrequencyData(dataArray);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const barCount = 32;
+        const barWidth = canvas.width / barCount;
+        const gap = 2;
+
+        for (let i = 0; i < barCount; i++) {
+          // Ambil nilai acak dari dataArray buat variasi beat
+          const value = dataArray[Math.floor(i * (bufferLength / barCount))];
+          const barHeight = (value / 255) * canvas.height * 0.9;
+
+          // Neon gradient
+          const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+          gradient.addColorStop(0, "#00f2ff");
+          gradient.addColorStop(1, "#ff00e0");
+          ctx.fillStyle = gradient;
+
+          // Tambahin glow
+          ctx.shadowColor = "#00ffff";
+          ctx.shadowBlur = 15;
+
+          // Bikin bar di tengah (centered)
+          const x = i * barWidth + gap / 2;
+          ctx.fillRect(x, canvas.height - barHeight, barWidth - gap, barHeight);
+        }
+
+        // Reset shadow biar ga nempel ke elemen lain
+        ctx.shadowBlur = 0;
+      }
+
+      // Mulai visualizer pas lagu dimainkan
+      audio.addEventListener("play", () => {
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        drawVisualizer();
+      });
+
+      audio.addEventListener("ended", () => {
+        if (repeatOnce) {
+          repeatOnce = false;
+          document.querySelector('button[onclick="repeatSong()"]').style.color =
+            "white";
+          audio.currentTime = 0;
+          audio.play();
+        } else {
+          currentSong = (currentSong + 1) % songOrder.length;
+          loadSong(currentSong);
+          audio.play();
+          playBtn.textContent = "⏸";
+        }
+      });
+    </script>
+  </body>
+</html>
