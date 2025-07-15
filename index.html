@@ -4,6 +4,48 @@
     <meta charset="UTF-8" />
     <title>music sam</title>
     <style>
+      @media (max-width: 600px) {
+        .player {
+          width: 90vw;
+          padding: 24px;
+        }
+
+        .cover {
+          width: 100%;
+          border-radius: 16px;
+        }
+
+        .title {
+          font-size: 26px;
+          margin-top: 12px;
+        }
+
+        .artist {
+          font-size: 20px;
+          margin-bottom: 20px;
+        }
+
+        .controls button {
+          padding: 16px 20px;
+          font-size: 24px;
+          margin: 0 6px;
+        }
+
+        #visualizer {
+          width: 100% !important;
+          height: 70px;
+        }
+
+        body {
+          padding: 10px;
+          height: auto;
+          min-height: 100vh;
+          justify-content: flex-start;
+          padding: 20px;
+          box-sizing: border-box;
+        }
+      }
+
       .player {
         animation: rgbGlow 6s ease-in-out infinite;
         border: 2px solid rgba(255, 255, 255, 0.2);
@@ -557,7 +599,7 @@
       function togglePlay() {
         if (audio.paused) {
           audio.play();
-          playBtn.textContent = "⏸";
+          playBtn.textContent = "⏸︎";
         } else {
           audio.pause();
           playBtn.textContent = "▶";
@@ -568,7 +610,7 @@
         currentSong = (currentSong + 1) % songOrder.length;
         loadSong(currentSong);
         audio.play();
-        playBtn.textContent = "⏸";
+        playBtn.textContent = "⏸︎";
       }
 
       function prevSong() {
@@ -675,7 +717,7 @@
           currentSong = (currentSong + 1) % songOrder.length;
           loadSong(currentSong);
           audio.play();
-          playBtn.textContent = "⏸";
+          playBtn.textContent = "⏸︎";
         }
       });
     </script>
