@@ -304,43 +304,55 @@
         animation: ripple 0.6s ease-out;
       }
 
-      @media (max-width: 600px) {
+      @media (max-width: 768px) {
+  body {
+    padding: 0;
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+  }
+
   .player {
-    width: 90vw;
-    padding: 6vw;
+    width: 100vw;
+    max-width: 100%;
+    padding: 5vw;
+    border-radius: 0;
+    box-sizing: border-box;
   }
 
   #cover {
     width: 100%;
+    height: auto;
     border-radius: 4vw;
   }
 
   .title {
-    font-size: 6vw;
-    margin-top: 3vw;
+    font-size: 7vw;
+    margin-top: 4vw;
   }
 
   .artist {
-    font-size: 4.5vw;
-    margin-bottom: 5vw;
+    font-size: 5vw;
+    margin-bottom: 6vw;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4vw;
   }
 
   .controls button {
     padding: 4vw;
-    font-size: 6vw;
-    margin: 2vw;
+    font-size: 7vw;
+    margin: 0;
   }
 
   #visualizer {
     width: 100% !important;
-    height: 15vw;
+    height: 18vw;
     margin-top: 6vw;
-  }
-
-  body {
-    justify-content: flex-start;
-    padding-top: 8vw;
-    padding-bottom: 8vw;
   }
 }
 
