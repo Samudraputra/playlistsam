@@ -4,82 +4,6 @@
     <meta charset="UTF-8" />
     <title>music sam</title>
     <style>
-       /* TAMBAHAN AGAR RESPONSIF DAN FULLSCREEN */
-      html, body {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        width: 100%;
-        height: 100%;
-        font-size: 16px;
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      body {
-        background: #f0f0f0;
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        overflow-x: hidden;
-      }
-
-      .player {
-        background: #757575;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        text-align: center;
-        width: 90vw;
-        max-width: 400px;
-        transform: scale(1.05);
-      }
-
-      .cover {
-        width: 100%;
-        border-radius: 12px;
-        transition: transform 0.3s ease;
-      }
-
-      .title {
-        font-size: 6vw;
-        margin-top: 12px;
-      }
-
-      .artist {
-        font-size: 4.5vw;
-        margin-bottom: 16px;
-      }
-
-      .controls button {
-        padding: 4vw;
-        font-size: 5vw;
-        margin: 1vw;
-      }
-
-      #visualizer {
-        width: 100% !important;
-        height: 15vw;
-        margin-top: 24px;
-      }
-
-      @media (min-width: 600px) {
-        .title {
-          font-size: 22px;
-        }
-        .artist {
-          font-size: 18px;
-        }
-        .controls button {
-          padding: 12px 16px;
-          font-size: 16px;
-          margin: 6px;
-        }
-        #visualizer {
-          height: 60px;
-        }
       .player {
         animation: rgbGlow 6s ease-in-out infinite;
         border: 2px solid rgba(255, 255, 255, 0.2);
@@ -381,46 +305,45 @@
       }
 
       @media (max-width: 600px) {
-        .player {
-          width: 95vw;
-          padding: 24px;
-          transform: scale(1.05);
-        }
+  .player {
+    width: 90vw;
+    padding: 6vw;
+  }
 
-        #cover {
-          width: 100%;
-          height: auto;
-          border-radius: 16px;
-        }
+  #cover {
+    width: 100%;
+    border-radius: 4vw;
+  }
 
-        .title {
-          font-size: 24px;
-          margin-top: 12px;
-        }
+  .title {
+    font-size: 6vw;
+    margin-top: 3vw;
+  }
 
-        .artist {
-          font-size: 18px;
-          margin-bottom: 16px;
-        }
+  .artist {
+    font-size: 4.5vw;
+    margin-bottom: 5vw;
+  }
 
-        .controls button {
-          padding: 16px;
-          font-size: 24px;
-          margin: 6px;
-        }
+  .controls button {
+    padding: 4vw;
+    font-size: 6vw;
+    margin: 2vw;
+  }
 
-        #visualizer {
-          width: 100% !important;
-          height: 70px;
-          margin-top: 24px;
-        }
+  #visualizer {
+    width: 100% !important;
+    height: 15vw;
+    margin-top: 6vw;
+  }
 
-        body {
-          justify-content: flex-start;
-          padding-top: 40px;
-          padding-bottom: 40px;
-        }
-      }
+  body {
+    justify-content: flex-start;
+    padding-top: 8vw;
+    padding-bottom: 8vw;
+  }
+}
+
 
       @keyframes ripple {
         to {
