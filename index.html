@@ -97,24 +97,31 @@
         margin: 0;
       }
       .player {
-        background: #757575;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 550px;
+        height: 1100px;
+        margin: 50px auto;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
         padding: 20px;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         text-align: center;
-        width: 300px;
+        animation: rgbGlow 6s ease-in-out infinite;
       }
       .cover {
-        width: 100%;
-        border-radius: 12px;
-        transition: transform 0.3s ease;
+        width: 10px;
+        height: 500px;
+        margin: 0 auto 30px;
+        border-radius: 20px;
+        overflow: hidden;
       }
       .cover:hover {
         transform: scale(1.03);
       }
 
       #cover {
-        width: 100%;
+        width: 95%;
+        height: 48%;
+        margin-top: 12px;
         border-radius: 14px;
         filter: grayscale(70%) brightness(0.8) contrast(1.3) saturate(0.6);
         box-shadow: 0 0 25px rgba(0, 255, 255, 0.1),
@@ -169,7 +176,7 @@
         transition: opacity 0.5s ease;
       }
       .title {
-        font-size: 22px;
+        font-size: 50px;
         margin: 10px 0 4px;
         font-weight: 900;
         text-transform: uppercase;
@@ -179,7 +186,7 @@
       }
 
       .artist {
-        font-size: 18px;
+        font-size: 30px;
         font-weight: 600;
         font-family: "Courier New", monospace;
         color: #ccc;
@@ -192,8 +199,8 @@
         position: relative;
         overflow: hidden;
         margin: 0 10px;
-        padding: 12px 16px;
-        font-size: 16px;
+        padding: 18px 22px;
+        font-size: 22px;
         border: none;
         border-radius: 50%;
         background: linear-gradient(145deg, #222, #444);
@@ -213,6 +220,10 @@
         box-shadow: 0 0 18px rgba(0, 255, 255, 0.6);
       }
 
+      .controls {
+        margin-top: 40px;
+      }
+
       #visualizer {
         background: #111;
         border-radius: 10px;
@@ -223,8 +234,8 @@
       .controls button::after {
         content: "";
         position: absolute;
-        width: 120%;
-        height: 120%;
+        width: 400px;
+        height: 400px;
         top: 50%;
         left: 50%;
         pointer-events: none;
@@ -260,9 +271,9 @@
       .controls button {
         position: relative;
         overflow: hidden;
-        margin: 0 10px;
-        padding: 14px 18px;
-        font-size: 20px;
+        margin: 0 24px;
+        padding: 28px 30px;
+        font-size: 30px;
         font-weight: bold;
         letter-spacing: 1px;
         border: none;
@@ -293,8 +304,8 @@
       .ripple {
         content: "";
         position: absolute;
-        width: 140%;
-        height: 140%;
+        width: 240px;
+        height: 240px;
         top: 50%;
         left: 50%;
         pointer-events: none;
@@ -329,9 +340,9 @@
 
       <canvas
         id="visualizer"
-        width="280"
-        height="60"
-        style="margin-top: 20px"
+        width="450"
+        height="100"
+        style="margin-top: 40px"
       ></canvas>
 
       <audio id="audio" src="about.mp3"></audio>
@@ -376,7 +387,7 @@
         });
 
         // spawn lagi dalam 3–6 detik
-        setTimeout(spawnShootingStar, Math.random() * 3000 + 3000);
+        setTimeout(spawnShootingStar, Math.random() * 1000 + 1000);
       }
 
       spawnShootingStar(); // mulaiin pertama kali
