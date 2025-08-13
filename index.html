@@ -258,13 +258,13 @@
 
       @keyframes sparkle {
         0% {
-          box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff inset;
+          box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff inset;
         }
         50% {
-          box-shadow: 0 0 20px #ff00e0, 0 0 30px #ff00e0 inset;
+          box-shadow: 0 0 20px #454545, 0 0 30px #4545454 inset;
         }
         100% {
-          box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff inset;
+          box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff inset;
         }
       }
 
@@ -1007,8 +1007,8 @@
 
           // Neon gradient
           const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-          gradient.addColorStop(0, "#00f2ff");
-          gradient.addColorStop(1, "#ff00e0");
+          gradient.addColorStop(0, "#ffffff");
+          gradient.addColorStop(1, "#454545");
           ctx.fillStyle = gradient;
 
           // Tambahin glow
