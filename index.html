@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>music sam</title>
+
     <style>
       .player {
         animation: rgbGlow 6s ease-in-out infinite;
@@ -261,7 +262,7 @@
           box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff inset;
         }
         50% {
-          box-shadow: 0 0 20px #454545, 0 0 30px #4545454 inset;
+          box-shadow: 0 0 20px #454545, 0 0 30px #454545 inset;
         }
         100% {
           box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff inset;
@@ -662,6 +663,34 @@
         },
 
         {
+          title: "no suprises",
+          artist: "Radiohead",
+          file: "sup.mp3",
+          cover: "sup.jpg",
+        },
+
+        {
+          title: "let down",
+          artist: "Radiohead",
+          file: "let.mp3",
+          cover: "sup.jpg",
+        },
+
+        {
+          title: "wish you were here",
+          artist: "Neck Deep",
+          file: "wish.mp3",
+          cover: "wish.jpg",
+        },
+
+        {
+          title: "december",
+          artist: "Neck Deep",
+          file: "dec.mp3",
+          cover: "dec.jpg",
+        },
+
+        {
           title: "apocalypse",
           artist: "Cigarettes After Sex",
           file: "apo.mp3",
@@ -1012,7 +1041,7 @@
           ctx.fillStyle = gradient;
 
           // Tambahin glow
-          ctx.shadowColor = "#00ffff";
+          ctx.shadowColor = "#fff";
           ctx.shadowBlur = 15;
 
           // Bikin bar di tengah (centered)
