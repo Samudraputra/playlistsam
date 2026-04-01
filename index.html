@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Sam - Pro Control</title>
+    <title>Music Sam - Fix Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root { --white: #ffffff; --bg: #000000; --red: #ff0000; --cyan: #00ffff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: var(--bg);
-            height: 100vh;
+            min-height: 100vh;
             display: flex; align-items: center; justify-content: center;
             font-family: 'Share Tech Mono', monospace;
             overflow: hidden; color: var(--white);
@@ -22,71 +22,70 @@
 
         .player-card {
             position: relative;
-            width: 650px;
-            padding: 50px;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(50px);
-            border: 1px solid rgba(255,255,255,0.05);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
             z-index: 10;
-            border-radius: 40px;
+            border-radius: 30px;
             transform-style: preserve-3d;
-            box-shadow: 0 50px 150px rgba(0,0,0,1);
+            text-align: center;
         }
 
         .visualizer-container {
             position: relative;
-            width: 350px; height: 350px;
-            margin: 0 auto 10px;
+            width: 220px; height: 220px;
+            margin: 0 auto 30px;
             display: flex; align-items: center; justify-content: center;
             transform-style: preserve-3d;
         }
 
+        /* FIX: Canvas sekarang menutupi area visualizer dengan benar */
         #vCanvas {
             position: absolute;
-            width: 450%; height: 450%; 
-            z-index: 1;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.3));
+            width: 600px; height: 600px; /* Ukuran tetap yang besar agar orbit tidak terpotong */
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(-50px);
             pointer-events: none;
-            transform: translateZ(-150px); 
+            z-index: 1;
         }
 
         .album-box {
-            width: 240px; height: 240px; 
+            width: 180px; height: 180px; 
             position: relative; z-index: 5;
-            background: #000;
             transform-style: preserve-3d;
-            will-change: transform;
             cursor: pointer;
         }
 
-        #cover { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2); border: 1px solid rgba(255,255,255,0.1); }
-
-        .info { text-align: center; transform: translateZ(100px); margin-top: 25px; min-height: 80px; }
-        #title { font-family: 'Orbitron', sans-serif; font-size: 28px; letter-spacing: 10px; font-weight: 700; text-transform: uppercase; display: block; }
-        #artist { opacity: 0.4; font-size: 11px; letter-spacing: 6px; margin-top: 10px; text-transform: uppercase; }
-
-        .progress-bar-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.1); margin: 40px 0; cursor: pointer; transform: translateZ(50px); }
-        #progress { height: 100%; width: 0%; background: #fff; box-shadow: 0 0 15px #fff; }
-
-        /* CONTROLS AREA */
-        .controls { display: flex; justify-content: space-around; align-items: center; transform: translateZ(120px); }
-        
-        .btn { 
-            background: none; border: none; color: #fff; opacity: 0.4; 
-            transition: 0.3s; font-family: 'Share Tech Mono'; cursor: pointer; 
-            font-size: 16px; font-weight: bold;
+        #cover { 
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            filter: grayscale(100%) contrast(1.2);
+            border-radius: 10px;
         }
-        .btn:hover, .btn.active { opacity: 1; text-shadow: 0 0 15px #fff; color: var(--cyan); }
+
+        .info { margin-bottom: 30px; }
+        #title { font-family: 'Orbitron', sans-serif; font-size: 22px; letter-spacing: 5px; margin-bottom: 10px; text-transform: uppercase; }
+        #artist { opacity: 0.5; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; }
+
+        .progress-bar-wrap { width: 100%; height: 4px; background: rgba(255,255,255,0.1); margin: 30px 0; cursor: pointer; border-radius: 2px; }
+        #progress { height: 100%; width: 0%; background: #fff; box-shadow: 0 0 10px #fff; border-radius: 2px; }
+
+        .controls { display: flex; justify-content: center; align-items: center; gap: 30px; margin-bottom: 25px; }
+        .btn { background: none; border: none; color: #fff; opacity: 0.5; cursor: pointer; transition: 0.3s; font-family: 'Share Tech Mono'; }
+        .btn:hover, .btn.active { opacity: 1; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
         
+        .btn-large { font-size: 28px; }
         .play-pause { 
-            width: 85px; height: 85px; 
+            width: 70px; height: 70px; 
             border: 2px solid #fff; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            font-size: 32px; opacity: 1;
+            font-size: 24px; opacity: 1;
         }
-        .play-pause:hover { background: #fff; color: #000; transform: scale(1.1); }
 
-        .extra-btns { margin-top: 20px; display: flex; justify-content: center; gap: 40px; transform: translateZ(100px); }
+        .extra-btns { display: flex; justify-content: center; gap: 20px; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -97,26 +96,26 @@
     <div class="visualizer-container">
         <canvas id="vCanvas"></canvas>
         <div class="album-box" id="album-box" onclick="togglePlay()">
-            <img id="cover" src="about.jpg" alt="Cover">
+            <img id="cover" src="placeholder.jpg" alt="Cover">
         </div>
     </div>
 
     <div class="info">
-        <h1 id="title">INIT_SYSTEM</h1>
-        <p id="artist">STATION_01</p>
+        <h1 id="title">SELECT_SONG</h1>
+        <p id="artist">STATION_ACTIVE</p>
     </div>
 
     <div class="progress-bar-wrap" id="progress-container"><div id="progress"></div></div>
 
     <div class="controls">
-        <button class="btn" onclick="prevSong()" style="font-size: 20px;">⏮</button>
+        <button class="btn btn-large" onclick="prevSong()">⏮</button>
         <button class="btn play-pause" id="play-btn" onclick="togglePlay()">▶</button>
-        <button class="btn" onclick="nextSong()" style="font-size: 20px;">⏭</button>
+        <button class="btn btn-large" onclick="nextSong()">⏭</button>
     </div>
 
     <div class="extra-btns">
-        <button class="btn" id="shuffle-btn" onclick="toggleShuffle()" title="Shuffle">SHUFFLE [OFF]</button>
-        <button class="btn" id="repeat-btn" onclick="toggleRepeat()" title="Repeat 1x then Next">REPEAT [OFF]</button>
+        <button class="btn" id="shuffle-btn" onclick="toggleShuffle()">SHUFFLE [OFF]</button>
+        <button class="btn" id="repeat-btn" onclick="toggleRepeat()">REPEAT [OFF]</button>
     </div>
 </div>
 
@@ -621,24 +620,17 @@
     const coverImg = document.getElementById('cover');
     const titleText = document.getElementById('title');
     const artistText = document.getElementById('artist');
-    const shuffleBtn = document.getElementById('shuffle-btn');
-    const repeatBtn = document.getElementById('repeat-btn');
-
+    
     let audioCtx, analyser, dataArray;
     let orbitAngle = 0;
-    let curX = 0, curY = 0, curZ = 0, curRotX = 0, curRotY = 0;
-    const lerpSpeed = 0.08;
+    let curX = 0, curY = 0, curZ = 0;
 
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    function scramble(targetElement, finalWord) {
-        let iteration = 0;
+    function scramble(el, text) {
+        let n = 0;
         const interval = setInterval(() => {
-            targetElement.innerText = finalWord.split("").map((char, index) => {
-                if (index < iteration) return finalWord[index];
-                return chars[Math.floor(Math.random() * chars.length)];
-            }).join("");
-            if (iteration >= finalWord.length) clearInterval(interval);
-            iteration += 1 / 3;
+            el.innerText = text.split("").map((c, i) => i < n ? text[i] : "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[Math.floor(Math.random()*36)]).join("");
+            if (n >= text.length) clearInterval(interval);
+            n += 1/3;
         }, 30);
     }
 
@@ -657,12 +649,13 @@
     function renderVisuals() {
         const vCanvas = document.getElementById('vCanvas');
         const vCtx = vCanvas.getContext('2d');
-        vCanvas.width = 2000; vCanvas.height = 2000;
-        const tris = Array.from({ length: 32 }, (_, i) => ({
-            baseAngle: (i / 32) * Math.PI * 2,
-            rotSpeed: (Math.random() - 0.5) * 0.1,
-            rotation: Math.random() * Math.PI,
-            size: 40 + Math.random() * 50
+        vCanvas.width = 600; vCanvas.height = 600; // Ukuran koordinat internal canvas
+
+        const tris = Array.from({ length: 30 }, () => ({
+            angle: Math.random() * Math.PI * 2,
+            rot: Math.random() * Math.PI,
+            speed: (Math.random() - 0.5) * 0.05,
+            size: 15 + Math.random() * 20
         }));
 
         function draw() {
@@ -672,33 +665,53 @@
             for(let i=0; i<10; i++) bass += dataArray[i];
             bass /= 10;
 
-            if (bass > 165 && isPlaying) {
-                const intens = (bass - 165) / 90;
-                curX += ((Math.random() - 0.5) * 120 * intens - curX) * lerpSpeed;
-                curY += ((Math.random() - 0.5) * 120 * intens - curY) * lerpSpeed;
-                curZ += (200 * intens - curZ) * lerpSpeed;
-                albumBox.style.boxShadow = `${-20 * intens}px 0 60px rgba(255,0,0,${0.6 * intens}), ${20 * intens}px 0 60px rgba(0,255,255,${0.6 * intens})`;
+            // Efek guncang album
+            if (bass > 170 && isPlaying) {
+                const intens = (bass - 170) / 80;
+                curX = (Math.random() - 0.5) * 30 * intens;
+                curY = (Math.random() - 0.5) * 30 * intens;
+                curZ = 40 * intens;
+                albumBox.style.boxShadow = `0 0 50px rgba(255,0,0,${intens}), 0 0 20px rgba(0,255,255,${intens})`;
             } else {
                 curX *= 0.9; curY *= 0.9; curZ *= 0.9;
-                albumBox.style.boxShadow = "0 40px 100px rgba(0,0,0,0.8)";
+                albumBox.style.boxShadow = "0 20px 50px rgba(0,0,0,0.5)";
             }
-            albumBox.style.transform = `translate3d(${curX}px, ${curY}px, ${curZ}px) rotateX(${curRotX}deg) rotateY(${curRotY}deg)`;
+            albumBox.style.transform = `translate3d(${curX}px, ${curY}px, ${curZ}px)`;
 
-            vCtx.clearRect(0, 0, 2000, 2000);
-            orbitAngle += 0.006 + (bass / 4000);
+            // Gambar visualizer
+            vCtx.clearRect(0, 0, 600, 600);
+            const cx = 300, cy = 300; // Titik tengah canvas
+            orbitAngle += 0.01;
+
             tris.forEach((t, i) => {
-                const freq = isPlaying ? dataArray[i % 128] : 0;
-                const radius = 14 + (bass * 0.8) + (freq * 0.5); // Jarak segitiga
-                const x = 1000 + Math.cos(t.baseAngle + orbitAngle) * radius;
-                const y = 1000 + Math.sin(t.baseAngle + orbitAngle) * radius;
-                vCtx.save(); vCtx.translate(x, y); vCtx.rotate(t.rotation += t.rotSpeed + (bass / 1200));
-                const s = t.size * (0.8 + freq/255);
-                vCtx.beginPath(); vCtx.moveTo(0, -s/2); vCtx.lineTo(s/2, s/2); vCtx.lineTo(-s/2, s/2); vCtx.closePath();
-                vCtx.strokeStyle = `rgba(255, 255, 255, ${0.2 + freq/200})`; vCtx.lineWidth = 3; vCtx.stroke();
+                const f = isPlaying ? dataArray[i % 100] : 0;
+                const r = 18 + (bass * 0.6) + (f * 0.4);
+                const x = cx + Math.cos(t.angle + orbitAngle) * r;
+                const y = cy + Math.sin(t.angle + orbitAngle) * r;
+
+                vCtx.save();
+                vCtx.translate(x, y);
+                vCtx.rotate(t.rot += t.speed);
+                vCtx.beginPath();
+                const s = t.size * (0.8 + f/200);
+                vCtx.moveTo(0, -s); vCtx.lineTo(s, s); vCtx.lineTo(-s, s);
+                vCtx.closePath();
+                vCtx.strokeStyle = bass > 180 ? `rgba(0,255,255,0.6)` : `rgba(255,255,255,0.3)`;
+                // Garis akan menebal otomatis saat ada bass/frekuensi tinggi
+                vCtx.lineWidth = 1 + (f / 50);
+                vCtx.stroke();
                 vCtx.restore();
             });
         }
         draw();
+    }
+
+    function loadSong(s) {
+        scramble(titleText, s.title.toUpperCase());
+        scramble(artistText, s.artist.toUpperCase());
+        audio.src = s.file;
+        coverImg.src = s.cover;
+        hasRepeated = false;
     }
 
     function togglePlay() {
@@ -708,20 +721,9 @@
         document.getElementById('play-btn').innerText = isPlaying ? '⏸' : '▶';
     }
 
-    function loadSong(song) {
-        scramble(titleText, song.title.toUpperCase());
-        scramble(artistText, song.artist.toUpperCase());
-        audio.src = song.file;
-        coverImg.src = song.cover;
-        hasRepeated = false; // Reset status pengulangan untuk lagu baru
-    }
-
     function nextSong() {
-        if (isShuffle) {
-            songIdx = Math.floor(Math.random() * songs.length);
-        } else {
-            songIdx = (songIdx + 1) % songs.length;
-        }
+        if (isShuffle) songIdx = Math.floor(Math.random() * songs.length);
+        else songIdx = (songIdx + 1) % songs.length;
         loadSong(songs[songIdx]);
         if(isPlaying) audio.play();
     }
@@ -734,54 +736,40 @@
 
     function toggleShuffle() {
         isShuffle = !isShuffle;
-        shuffleBtn.classList.toggle('active');
-        shuffleBtn.innerText = isShuffle ? "SHUFFLE [ON]" : "SHUFFLE [OFF]";
+        document.getElementById('shuffle-btn').innerText = `SHUFFLE [${isShuffle ? 'ON' : 'OFF'}]`;
+        document.getElementById('shuffle-btn').classList.toggle('active');
     }
 
     function toggleRepeat() {
         isRepeat = !isRepeat;
-        repeatBtn.classList.toggle('active');
-        repeatBtn.innerText = isRepeat ? "REPEAT [ON]" : "REPEAT [OFF]";
+        document.getElementById('repeat-btn').innerText = `REPEAT [${isRepeat ? 'ON' : 'OFF'}]`;
+        document.getElementById('repeat-btn').classList.toggle('active');
     }
 
-    // LOGIKA AUTO-NEXT & REPEAT
     audio.onended = () => {
-        if (isRepeat && !hasRepeated) {
-            hasRepeated = true;
-            audio.currentTime = 0;
-            audio.play();
-        } else {
-            nextSong();
-        }
+        if (isRepeat && !hasRepeated) { hasRepeated = true; audio.play(); }
+        else nextSong();
     };
 
-    const progressContainer = document.getElementById('progress-container');
-    progressContainer.addEventListener('click', (e) => {
-        const width = progressContainer.clientWidth;
-        const clickX = e.offsetX;
-        if(audio.duration) audio.currentTime = (clickX / width) * audio.duration;
-    });
+    const progCont = document.getElementById('progress-container');
+    progCont.onclick = (e) => { audio.currentTime = (e.offsetX / progCont.clientWidth) * audio.duration; };
+    audio.ontimeupdate = () => { document.getElementById('progress').style.width = (audio.currentTime / audio.duration) * 100 + '%'; };
 
-    audio.ontimeupdate = () => { if(audio.duration) document.getElementById('progress').style.width = (audio.currentTime / audio.duration) * 100 + '%'; };
-
-    // Starfield BG
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d');
+    // Star BG logic
+    const bgC = document.getElementById('bgCanvas');
+    const bgCtx = bgC.getContext('2d');
     let stars = [];
-    function initStars() {
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        stars = Array.from({length: 250}, () => ({ x: Math.random()*canvas.width-canvas.width/2, y: Math.random()*canvas.height-canvas.height/2, z: Math.random()*canvas.width }));
-    }
-    function drawStars() {
-        ctx.fillStyle = "black"; ctx.fillRect(0,0, canvas.width, canvas.height);
-        ctx.save(); ctx.translate(canvas.width/2, canvas.height/2);
-        stars.forEach(s => { s.z -= 6; if(s.z <= 0) s.z = canvas.width;
-            let x = s.x / (s.z / canvas.width); let y = s.y / (s.z / canvas.width);
-            ctx.fillStyle = "rgba(255,255,255,0.3)"; ctx.beginPath(); ctx.arc(x, y, 1.5, 0, Math.PI*2); ctx.fill();
+    function resize() { bgC.width = window.innerWidth; bgC.height = window.innerHeight; stars = Array.from({length:200}, () => ({x:Math.random()*bgC.width, y:Math.random()*bgC.height, z:Math.random()*bgC.width})); }
+    function animBg() {
+        bgCtx.fillStyle = '#000'; bgCtx.fillRect(0,0,bgC.width,bgC.height);
+        stars.forEach(s => {
+            s.z -= 2; if(s.z<=0) s.z = bgC.width;
+            bgCtx.fillStyle = 'rgba(255,255,255,0.3)';
+            bgCtx.beginPath(); bgCtx.arc(s.x, s.y, 1, 0, 7); bgCtx.fill();
         });
-        ctx.restore(); requestAnimationFrame(drawStars);
+        requestAnimationFrame(animBg);
     }
-    window.onresize = initStars; initStars(); drawStars(); loadSong(songs[0]);
+    window.onresize = resize; resize(); animBg(); loadSong(songs[0]);
 </script>
 </body>
 </html>
